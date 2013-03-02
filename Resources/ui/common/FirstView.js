@@ -1,11 +1,13 @@
 //FirstView Component Constructor
-function CreateDefaultButton( text ){
+function CreateDefaultButton( text, top, left ){
 	var button = Ti.UI.createButton({
 		title: text,
 		color: '#000',
 		height: 'auto',
 		width: 'auto'
 	});
+	button.setTop( top )
+	button.setLeft( left )
 	return button;	
 }
 
@@ -27,18 +29,16 @@ function FirstView() {
 		alert(e.source.text);
 	});
 	
-	var button1 = CreateDefaultButton('1')
-	button1.setTop(50)
-	button1.setLeft(10)
-	var button2 = CreateDefaultButton('2')
-	button2.setTop(50)
-	button2.setLefr(50)
-
-	self.add(button1)	
-	self.add(button2)	
+	var buttons = [
+		CreateDefaultButton('1', 50, 10),
+		CreateDefaultButton('2', 50, 50)
+		]
+	for( var i = 0; i < buttons.length; i++){
+		self.add(buttons[i])
+	}
 
 	var num = 0;
-	button2.addEventListener('click',function(e){
+	buttons[1].addEventListener('click',function(e){
 		label.setText( 'clicked: ' + num++ )
 	});
 
