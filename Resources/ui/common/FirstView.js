@@ -30,8 +30,12 @@ function FirstView() {
 	});
 	
 	var buttons = [
-		CreateDefaultButton('1', 50, 10),
-		CreateDefaultButton('2', 50, 50)
+		CreateDefaultButton('1', 50,  10),
+		CreateDefaultButton('2', 50,  50),
+		CreateDefaultButton('3', 50,  90),
+		CreateDefaultButton('4', 100, 10),
+		CreateDefaultButton('5', 100, 50),
+		CreateDefaultButton('6', 100, 90),
 		]
 	for( var i = 0; i < buttons.length; i++){
 		self.add(buttons[i])
