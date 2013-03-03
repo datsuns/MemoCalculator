@@ -161,11 +161,15 @@ function FirstView() {
 	self.add(label);
 
 	AddKeyButtons( self, label )
+
+	var text_input = Ti.UI.createTextArea({
+		top:300,
+		left:0,
+		height:200,
+		width:200,
+	})
+	self.add(text_input)
 	
-	//Add behavior for UI
-	label.addEventListener('click', function(e) {
-		alert(e.source.text);
-	});
 
 	return self;
 }
