@@ -3,6 +3,12 @@ var Button;
 Button = (function() {
 
   function Button(title, top, left, height, width) {
+    if (height == null) {
+      height = '15%';
+    }
+    if (width == null) {
+      width = '15%';
+    }
     this.button = Ti.UI.createButton({
       title: title,
       color: '#000',

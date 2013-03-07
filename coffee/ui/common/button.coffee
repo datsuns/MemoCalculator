@@ -1,5 +1,5 @@
 class Button
-  constructor:(title, top, left, height, width) ->
+  constructor:(title, top, left, height = '15%', width = '15%') ->
     @button = Ti.UI.createButton(
       title: title,
       color: '#000',

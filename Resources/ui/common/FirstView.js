@@ -131,6 +131,7 @@ function FirstView() {
 
   var AppMain = require('ui/common/app_main');
   var app = new AppMain();
+  return app;
 	
 	//label using localization-ready strings from <app dir>/i18n/en/strings.xml
 	var label = Ti.UI.createLabel({
