@@ -1,28 +1,25 @@
-var inputed_number = 0
-var calculated_number = 0
-var operation = Nothing
+var operation = Nothing;
+var Calculator = require('ui/common/Calculator');
+var calculator = new Calculator();
 
-function Nothing( a, b ){
-	return a
+function Nothing( operator ){
+	return operator.result();
 }
 
-function Plus( a, b ){
-	return a + b
+function Plus( operator ){
+	return operator.add();
 }
 
-function Minus( a, b ){
-	return a - b
+function Minus( operator ){
+	return operator.minus();
 }
 
-function Multiple( a, b ){
-	return a * b
+function Multiple( operator ){
+	return operator.multi();
 }
 
-function Divide( a, b ){
-	if( b == 0 ){
-		return 0
-	}
-	return a / b
+function Divide( operator){
+	return operator.divide();
 }
 
 function CreateButton( text, top, left ){
@@ -32,76 +29,65 @@ function CreateButton( text, top, left ){
 		height: '15%',
 		width: '15%'
 	});
-	button.setTop( top )
-	button.setLeft( left )
-	return button
+	button.setTop( top );
+	button.setLeft( left );
+	return button;
 }
 
 
 //FirstView Component Constructor
 function CreateNumberButton( text, top, left, output ){
-	var button = CreateButton( text, top, left )
+	var button = CreateButton( text, top, left );
 
 	button.addEventListener('click',function(e){
-		inputed_number *= 10
-		inputed_number += Number(text)
-		output.setText( inputed_number )
+		calculator.push(Number(text)) ;
+		output.setText( calculator.get_input() );
 	});
 	return button;	
-}
-
-function UpdateNumbers(){
-	if( calculated_number == 0 ){
-		calculated_number = inputed_number
-	}
-	inputed_number = 0
 }
 
 function CreateFunctionButton( text, top, left, output ){
 	var button = CreateButton( text, top, left )
 	if( text == '+' ){
 		button.addEventListener('click',function(e){
-			UpdateNumbers()
-			operation = Plus
+			calculator.update();
+			operation = Plus;
 		});
 	}
 	if( text == '-' ){
 		button.addEventListener('click',function(e){
-			UpdateNumbers()
-			operation = Minus
+			calculator.update();
+			operation = Minus;
 		});
 	}
 	if( text == '*' ){
 		button.addEventListener('click',function(e){
-			UpdateNumbers()
-			operation = Multiple
+			calculator.update();
+			operation = Multiple;
 		});
 	}
 	if( text == '/' ){
 		button.addEventListener('click',function(e){
-			UpdateNumbers()
-			operation = Divide
+			calculator.update();
+			operation = Divide;
 		});
 	}
 	if( text == '=' ){
 		button.addEventListener('click',function(e){
-			calculated_number = operation( calculated_number, inputed_number )
-			output.setText( calculated_number )
-			operation = Nothing
+      operation(calculator)
+			output.setText( calculator.result() );
+			operation = Nothing;
 		});
 	}
 	if( text == 'c' ){
 		button.addEventListener('click',function(e){
-			inputed_number = 0
-			calculated_number = 0
-			output.setText( calculated_number )
+			calculator.clear();
+			output.setText( 0 );
 		});
 	}
 	if( text == 'debug' ){
 		button.addEventListener('click',function(e){
-			var msg = 'calculated_number: ' + calculated_number + "\n" +
-								'inputed_number: ' + inputed_number + "\n" +
-			alert( msg )
+			alert( calculator.to_string() );
 		});
 	}
 	return button
@@ -137,16 +123,14 @@ function AddKeyButtons( parent, output ){
 	for( var i = 0; i < buttons.length; i++){
 		parent.add(buttons[i])
 	}
-
-//buttons[1].addEventListener('click',function(e){
-//output.setText( 'clicked: ' + num++ )
-//});
-
 }
 
 function FirstView() {
 	//create object instance, a parasitic subclass of Observable
 	var self = Ti.UI.createView();
+
+  var AppMain = require('ui/common/app_main');
+  var app = new AppMain();
 	
 	//label using localization-ready strings from <app dir>/i18n/en/strings.xml
 	var label = Ti.UI.createLabel({
@@ -169,7 +153,7 @@ function FirstView() {
 		width:'50%',
 	})
 	self.add(text_input)
-	
+
 
 	return self;
 }
