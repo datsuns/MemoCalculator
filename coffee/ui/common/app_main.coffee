@@ -15,52 +15,60 @@ class AppMain
     self.add @create_memo_area()
     self
 
+  create_font:(widget) ->
+    widget.font = {fontSize:'90%'}
+
   create_output_label: ->
-    Ti.UI.createLabel(
+    label = Ti.UI.createLabel(
       color:'#000000',
       text:'0',
       height:'10%',
-      width:'60%',
+      width:'100%',
       top:0,
       left:0,
       textAlign: Ti.UI.TEXT_ALIGNMENT_RIGHT,
-      backgroundColor: '#CDE'
+      backgroundColor: '#CDE',
     )
+    @create_font(label)
+    label
 
   create_memo_area: ->
     Ti.UI.createTextArea(
-      top:'85%',
+      top:'70%',
       left:0,
-      height:'15%',
-      width:'60%',
-      backgroundColor: '#CDE'
+      height:'30%',
+      width:'100%',
+      backgroundColor: '#CDE',
+      hintText: 'MEMO'
     )
 
   create_key_buttons:(parent, output) ->
     buttons = [
       @create_number_button(parent, output,   7,   '10%', '0%'),
-      @create_number_button(parent, output,   8,   '10%', '15%'),
-      @create_number_button(parent, output,   9,   '10%', '30%'),
-      @create_function_button(parent, output, '/', '10%', '45%'),
+      @create_number_button(parent, output,   8,   '10%', '20%'),
+      @create_number_button(parent, output,   9,   '10%', '40%'),
+      @create_function_button(parent, output, '/', '10%', '60%'),
+      @create_function_button(parent, output, 'c', '10%', '80%'),
 
       @create_number_button(parent, output,   4,   '25%', '0%'),
-      @create_number_button(parent, output,   5,   '25%', '15%'),
-      @create_number_button(parent, output,   6,   '25%', '30%'),
-      @create_function_button(parent, output, '*', '25%', '45%'),
+      @create_number_button(parent, output,   5,   '25%', '20%'),
+      @create_number_button(parent, output,   6,   '25%', '40%'),
+      @create_function_button(parent, output, '*', '25%', '60%'),
+      @create_function_button(parent, output, 'debug', '25%', '80%'),
 
       @create_number_button(parent, output,   1,   '40%', '0%'),
-      @create_number_button(parent, output,   2,   '40%', '15%'),
-      @create_number_button(parent, output,   3,   '40%', '30%'),
-      @create_function_button(parent, output, '-', '40%', '45%'),
+      @create_number_button(parent, output,   2,   '40%', '20%'),
+      @create_number_button(parent, output,   3,   '40%', '40%'),
+      @create_function_button(parent, output, '-', '40%', '60%'),
 
       @create_number_button(parent, output,   0,   '55%', '0%'),
-      @create_function_button(parent, output, '.', '55%', '15%'),
-      @create_function_button(parent, output, '=', '55%', '30%'),
-      @create_function_button(parent, output, '+', '55%', '45%'),
+      @create_function_button(parent, output, '.', '55%', '20%'),
+      @create_function_button(parent, output, '=', '55%', '40%'),
+      @create_function_button(parent, output, '+', '55%', '60%'),
 
-      @create_function_button(parent, output, 'c', '70%', '45%'),
     ]
     for b in buttons
+      @create_font(b)
       parent.add b
 
   create_number_button:(parent, output, num, top, left) ->
@@ -74,11 +82,17 @@ class AppMain
     b = Button(char, top, left)
     b.addEventListener('click', @switch_plus) if char is '+'
     b.addEventListener('click', @switch_minus) if char is '-'
+    b.addEventListener('click', @debug_print) if char is 'debug'
     if char is '='
       b.addEventListener('click', (e)=>
         @calc_operation(@calculator)
         output.setText @calculator.result()
         @calc_operation = @calc_nothing
+      )
+    if char is 'c'
+      b.addEventListener('click', (e)=>
+        @calculator.clear()
+        output.setText @calculator.result()
       )
     b
 
@@ -95,5 +109,11 @@ class AppMain
   calca_minus:(operator) -> operator.minus()
 
   calc_nothing:(operator) ->
+
+  debug_print: =>
+    str =  "result: #{@calculator.result()}\n"
+    str += "input:  #{@calculator.get_input()}\n"
+    str += "memory: #{@calculator.memoried()}\n"
+    alert str
 
   module.exports = AppMain
