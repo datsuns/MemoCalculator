@@ -7,7 +7,7 @@ Button = (function() {
       height = '15%';
     }
     if (width == null) {
-      width = '15%';
+      width = '20%';
     }
     this.button = Ti.UI.createButton({
       title: title,
